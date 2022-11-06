@@ -1,6 +1,6 @@
 <template>
 
-  <HeaderItem title="Abnation"/>
+  <HeaderItem title="VueCrud"/>
   <Router-view></Router-view>
 </template>
 

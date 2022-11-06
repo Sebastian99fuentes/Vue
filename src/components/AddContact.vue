@@ -1,14 +1,96 @@
 <template>
 
-<div>
-    <h1>ADD contact</h1>
-</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="alert alert-danger mt-4" v-if="errors.length">
+                    <ul class="mb-0">
+                        <li v-for="(errors, index) in errors" :key="index">
+                            {{errors}}
+                        </li>
+                    </ul>
+                </div>
+                <form @submit.prevent="saveContact" novalidate>
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="form-label mt-4">Name</label>
+                            <input type="text" class="form-control" v-model="contact.name" placeholder="Enter Name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label mt-4">mail</label>
+                            <input type="text" class="form-control" v-model="contact.email" placeholder="Enter Email">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label mt-4">designation</label>
+                            <input type="text" class="form-control" v-model="contact.designation"
+                                placeholder="Enter Designation">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label mt-4">contact_no
 
+                            </label>
+                            <input type="text" class="form-control" v-model="contact.contact_no"
+                                placeholder="Enter Phone">
+                        </div>
+
+                        <button class="btn btn-primary mt-4">Submit</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
+import axios from 'axios';
 
-export default{
-    name:'AddContact'
-}
+    export default {
+        name: 'AddContact',
+
+        data() {
+            return {
+                contact: {},
+                name: '',
+                email: '',
+                designation: '',
+                contact_no: '',
+
+                errors: []
+            }
+        },
+        methods: {
+            async saveContact() {
+                this.errors = [];
+                if (!this.contact.name) {
+                    this.errors.push("Name is required")
+                }
+                if (!this.contact.email) {
+                    this.errors.push("email is required")
+                }
+                if (!this.contact.designation) {
+                    this.errors.push("designation is required")
+                }
+                if (!this.contact.contact_no) {
+                    this.errors.push("contact_no is required")
+                }
+                if (!this.errors.length) {
+                    let formData = new FormData();
+                    formData.append('name', this.contact.name);
+                    formData.append('email', this.contact.email);
+                    formData.append('designation', this.contact.designation);
+                    formData.append('contact_no', this.contact.contact_no);
+
+                    let url='http://127.0.0.1:8000/api/save_contact';
+                    
+                    await axios.post(url,formData).then((response)=>{
+                        console.log(response);
+                        if(response.status==200){
+                            alert(response.data.message);
+                        }
+                    });
+
+                }
+            }
+        }
+    }
 </script>
