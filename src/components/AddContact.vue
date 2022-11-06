@@ -85,8 +85,16 @@ import axios from 'axios';
                     await axios.post(url,formData).then((response)=>{
                         console.log(response);
                         if(response.status==200){
+                            this.contact.name='';
+                            this.contact.email='';
+                            this.contact.designation='';
+                            this.contact.contact_no='';
                             alert(response.data.message);
+                        }else{
+                            console.log('error');
                         }
+                    }).catch( error=>{
+                        this.errors.push(error.response);
                     });
 
                 }
